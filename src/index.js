@@ -48,7 +48,7 @@ app.get('/users/:id', (req, res) => {
     .then((user) => {
       if (!user) {
         return res.status(404).send({
-          message: 'Record not found',
+          message: 'User not found',
         });
       }
       res.send(user);
@@ -74,6 +74,49 @@ app.post('/tasks', (req, res) => {
         error: error,
       });
     });
+});
+
+app.get('/tasks', (req, res) => {
+  Task.find({})
+    .then((tasks) => {
+      res.send(tasks);
+    })
+    .catch((error) => {
+      res.status(500).send({
+        message: 'Server Error!',
+        error: error,
+      });
+    });
+});
+
+app.get('/tasks/:id', (req, res) => {
+  const _id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(400).send({
+      message: 'Invalid Object ID',
+    });
+  }
+  Task.findById(_id)
+    .then((task) => {
+      if (!task) {
+        return res.status(404).send({
+          message: 'Task not found',
+        });
+      }
+      res.send(task);
+    })
+    .catch((error) => {
+      res.status(500).send({
+        message: 'Server Error!',
+        error: error,
+      });
+    });
+});
+
+app.get('*', (req, res) => {
+  res.status(404).send({
+    message: 'Invalid route',
+  });
 });
 
 app.listen(port, () => {
