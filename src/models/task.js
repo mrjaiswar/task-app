@@ -8,7 +8,7 @@ const Task = mongoose.model('task', {
     trim: true,
     maxlength: 50,
   },
-  status: {
+  completed: {
     type: Boolean,
     required: false,
     default: false,
