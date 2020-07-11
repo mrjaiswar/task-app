@@ -25,10 +25,43 @@ router.post('/users/login', async (req, res) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
+    user.token = { token };
     res.send(user);
   } catch (error) {
     res.status(400).send({
       error: 'Invalid credentials!',
+    });
+  }
+});
+
+router.post('/users/logout', auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token;
+    });
+    await req.user.save();
+    res.send({
+      message: 'Logout successful',
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: 'Logout failed',
+      errorMessage: error,
+    });
+  }
+});
+
+router.post('/users/logoutAll', auth, async (req, res) => {
+  try {
+    req.user.tokens = [];
+    await req.user.save();
+    res.send({
+      message: 'Logged out of all sessions',
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: 'Logout failed',
+      errorMessage: error,
     });
   }
 });
