@@ -20,9 +20,9 @@ router.post('/tasks', auth, async (req, res) => {
   }
 });
 
-router.get('/tasks', async (req, res) => {
+router.get('/tasks', auth, async (req, res) => {
   try {
-    const tasks = await Task.find({});
+    const tasks = await Task.find({ owner: req.user._id });
     res.send(tasks);
   } catch (error) {
     res.status(500).send({
@@ -32,7 +32,7 @@ router.get('/tasks', async (req, res) => {
   }
 });
 
-router.get('/tasks/:id', async (req, res) => {
+router.get('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
@@ -40,7 +40,8 @@ router.get('/tasks/:id', async (req, res) => {
     });
   }
   try {
-    const task = await Task.findById(_id);
+    const task = await Task.findOne({ _id, owner: req.user._id });
+    console.log(task);
     if (!task) {
       return res.status(404).send({
         error: 'Task not found',
@@ -55,7 +56,7 @@ router.get('/tasks/:id', async (req, res) => {
   }
 });
 
-router.patch('/tasks/:id', async (req, res) => {
+router.patch('/tasks/:id', auth, async (req, res) => {
   const updateBody = Object.keys(req.body);
   const allowedOperation = ['description', 'completed'];
 
@@ -77,7 +78,10 @@ router.patch('/tasks/:id', async (req, res) => {
   }
 
   try {
-    const task = await Task.findById(_id);
+    const task = await Task.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
     if (!task) {
       return res.status(404).send({
         error: 'Task not found!',
@@ -96,7 +100,7 @@ router.patch('/tasks/:id', async (req, res) => {
   }
 });
 
-router.delete('/tasks/:id', async (req, res) => {
+router.delete('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
@@ -105,7 +109,10 @@ router.delete('/tasks/:id', async (req, res) => {
   }
 
   try {
-    const task = await Task.findByIdAndDelete(_id);
+    const task = await Task.findByIdAndDelete({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
     if (!task) {
       return res.status(404).send({
         error: 'Task not found',

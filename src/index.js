@@ -22,3 +22,18 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
   console.log(`Application is listening on ${port}`);
 });
+
+// const Task1 = require('./models/task');
+// const User1 = require('./models/user');
+
+// const main = async () => {
+//   // const task = await Task1.findById('5f0a6886e9a4a60175ea7225');
+//   // await task.populate('owner').execPopulate();
+//   // console.log(task.owner);
+
+//   const user = await User1.findById('5f083eed4ccc6a698a74a8ec');
+//   await user.populate('tasks').execPopulate();
+//   console.log(user.tasks);
+// };
+
+// main();
