@@ -13,11 +13,14 @@ const taskSchema = new mongoose.Schema({
     required: false,
     default: false,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
 });
 
 taskSchema.pre('save', async function (next) {
   const task = this;
-  console.log('Task save pre hook');
   next();
 });
 
