@@ -3,12 +3,13 @@ const router = new express.Router();
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
+const { response } = require('express');
 
 router.post('/users', async (req, res) => {
   const user = new User(req.body);
   try {
-    await user.save();
     const token = await user.generateAuthToken();
+    await user.save();
     res.status(201).send(user);
   } catch (error) {
     res.status(500).send({
@@ -25,7 +26,6 @@ router.post('/users/login', async (req, res) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
-    user.token = { token };
     res.send(user);
   } catch (error) {
     res.status(400).send({
@@ -82,30 +82,18 @@ router.get('/users', auth, async (req, res) => {
   }
 });
 
-router.get('/users/:id', async (req, res) => {
-  const _id = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(_id)) {
-    return res.status(400).send({
-      error: 'Invalid Object ID',
-    });
-  }
+router.delete('/users/me', auth, async (req, res) => {
   try {
-    const user = await User.findById(_id);
-    if (!user) {
-      return res.status(404).send({
-        error: 'User not found',
-      });
-    }
-    res.send(user);
+    await req.user.remove();
+    res.send(req.user);
   } catch (error) {
-    res.status(500).send({
-      error: 'Server Error!',
-      errorMessage: error,
+    response.status(500).send({
+      error: 'Delete user failed',
     });
   }
 });
 
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/:id', auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdateFields = ['name', 'email', 'password'];
   const isValidOperation = updates.every((update) =>
@@ -125,17 +113,11 @@ router.patch('/users/:id', async (req, res) => {
     });
   }
   try {
-    const user = await User.findById(_id);
-    if (!user) {
-      return res.status(404).send({
-        error: 'User not found to update',
-      });
-    }
     updates.forEach((update) => {
-      user[update] = req.body[update];
+      req.user[update] = req.body[update];
     });
-    await user.save();
-    res.send(user);
+    await req.user.save();
+    res.send(req.user);
   } catch (error) {
     res.status(500).send({
       error: 'Server Error!',
