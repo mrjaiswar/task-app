@@ -4,7 +4,7 @@ const User = require('../models/user');
 const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 const { response } = require('express');
-const { sendEmail } = require('../emails/account');
+const { sendEmail, sendCancellationEmail } = require('../emails/account');
 
 router.post('/users', async (req, res) => {
   const user = new User(req.body);
@@ -87,6 +87,7 @@ router.get('/users', auth, async (req, res) => {
 router.delete('/users/me', auth, async (req, res) => {
   try {
     await req.user.remove();
+    sendCancellationEmail(req.user.name, req.user.email);
     res.send(req.user);
   } catch (error) {
     response.status(500).send({
