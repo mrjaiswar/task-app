@@ -4,48 +4,53 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Task = require('./task');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true,
-    lowercase: true,
-    validate(value) {
-      if (!validator.isEmail(value)) {
-        throw new Error('Invalid email format');
-      }
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 7,
-    validate(value) {
-      if (value.toLowerCase().includes('password')) {
-        throw new Error("password can't contain the word password");
-      }
-    },
-  },
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true,
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
+      lowercase: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error('Invalid email format');
+        }
       },
     },
-  ],
-  token: {
-    type: String,
-    required: true,
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 7,
+      validate(value) {
+        if (value.toLowerCase().includes('password')) {
+          throw new Error("password can't contain the word password");
+        }
+      },
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    token: {
+      type: String,
+      required: true,
+    },
   },
-});
+  {
+    timestamps: true,
+  }
+);
 
 userSchema.virtual('tasks', {
   ref: 'task',

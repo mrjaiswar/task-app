@@ -4,12 +4,14 @@ const User = require('../models/user');
 const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 const { response } = require('express');
+const { sendEmail } = require('../emails/account');
 
 router.post('/users', async (req, res) => {
   const user = new User(req.body);
   try {
     await user.generateAuthToken();
     await user.save();
+    sendEmail(user.name, user.email);
     res.status(201).send(user);
   } catch (error) {
     res.status(500).send({
