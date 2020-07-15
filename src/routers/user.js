@@ -6,6 +6,32 @@ const auth = require('../middleware/auth');
 const { response } = require('express');
 const { sendEmail, sendCancellationEmail } = require('../emails/account');
 
+/**
+ * @swagger
+ * /users:
+ *  post:
+ *    description: Use to create new users
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: user
+ *        description: The user to create.
+ *        schema:
+ *          type: object
+ *          required:
+ *            - userName
+ *          properties:
+ *            name:
+ *              type: string
+ *            email:
+ *              type: string
+ *            password:
+ *              type: string
+ *    responses:
+ *      '201':
+ *        description: User creation successful
+ */
 router.post('/users', async (req, res) => {
   const user = new User(req.body);
   try {
@@ -21,6 +47,30 @@ router.post('/users', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/login:
+ *  post:
+ *    description: Use to login
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: user
+ *        description: The user to create.
+ *        schema:
+ *          type: object
+ *          required:
+ *            - userName
+ *          properties:
+ *            email:
+ *              type: string
+ *            password:
+ *              type: string
+ *    responses:
+ *      '201':
+ *        description: User creation successful
+ */
 router.post('/users/login', async (req, res) => {
   try {
     const user = await User.findByCredentials(
@@ -36,6 +86,23 @@ router.post('/users/login', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/logout:
+ *  post:
+ *    description: Use to logout of current session of the user
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '200':
+ *        description: Logout successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.post('/users/logout', auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
@@ -53,6 +120,23 @@ router.post('/users/logout', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/logoutAll:
+ *  post:
+ *    description: Use to logout all sessions of an user
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '200':
+ *        description: Logout successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.post('/users/logoutAll', auth, async (req, res) => {
   try {
     req.user.tokens = [];
@@ -68,10 +152,44 @@ router.post('/users/logoutAll', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/me:
+ *  get:
+ *    description: Use to get current logged in user profile information
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '200':
+ *        description: Logout successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.get('/users/me', auth, async (req, res) => {
   res.send(req.user);
 });
 
+/**
+ * @swagger
+ * /users:
+ *  get:
+ *    description: Use to get details of all registered users in the system
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '200':
+ *        description: Logout successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.get('/users', auth, async (req, res) => {
   try {
     const users = await User.find({});
@@ -84,6 +202,23 @@ router.get('/users', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/me:
+ *  delete:
+ *    description: Use to remove user profile
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '200':
+ *        description: Logout successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.delete('/users/me', auth, async (req, res) => {
   try {
     await req.user.remove();
@@ -96,6 +231,28 @@ router.delete('/users/me', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/{id}:
+ *  patch:
+ *    description: Use to update user details
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *       - name: id
+ *         description: User Id
+ *         in: path
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '200':
+ *        description: Logout successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.patch('/users/:id', auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdateFields = ['name', 'email', 'password'];

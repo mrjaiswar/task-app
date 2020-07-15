@@ -4,6 +4,38 @@ const Task = require('../models/task');
 const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 
+/**
+ * @swagger
+ * /tasks:
+ *  post:
+ *    description: Use to create tasks
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - name: Authorization
+ *        description: JWT Token
+ *        in: header
+ *        required: true
+ *        type: string
+ *      - in: body
+ *        name: task
+ *        description: The task to create.
+ *        required: true
+ *        schema:
+ *          type: object
+ *          required:
+ *            - task
+ *          properties:
+ *            description:
+ *              type: string
+ *            completed:
+ *              type: string
+ *    responses:
+ *      '201':
+ *        description: Task creation successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.post('/tasks', auth, async (req, res) => {
   const task = new Task({
     ...req.body,
@@ -20,9 +52,41 @@ router.post('/tasks', auth, async (req, res) => {
   }
 });
 
-// GET /tasks?completed=true
-//GET /tasks?limit=10&skip=20
-//GET /tasks?sortBy=createdAt:desc
+/**
+ * @swagger
+ * /tasks:
+ *  get:
+ *    description: Use to query tasks
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *       - name: completed
+ *         description: Filter for completion flag
+ *         in: query
+ *         required: false
+ *         type: string
+ *       - name: limit
+ *         description: Limit the number of search records
+ *         in: query
+ *         required: false
+ *         type: int
+ *       - name: sortBy
+ *         description: Sort the results by creation date or completion status
+ *         in: query
+ *         required: false
+ *         type: String
+ *         example: sortBy=createdAt:desc
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '201':
+ *        description: Task query successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.get('/tasks', auth, async (req, res) => {
   const match = {};
   const sort = {};
@@ -82,6 +146,41 @@ router.get('/tasks/:id', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /tasks/{id}:
+ *  patch:
+ *    description: Use to task user details
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *       - name: id
+ *         description: User Id
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: task
+ *         in: body
+ *         description: The task to update.
+ *         required: true
+ *         schema:
+ *          type: object
+ *          required:
+ *            - task
+ *          properties:
+ *            description:
+ *              type: string
+ *            completed:
+ *              type: string
+ *    responses:
+ *      '200':
+ *        description: Task update successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.patch('/tasks/:id', auth, async (req, res) => {
   const updateBody = Object.keys(req.body);
   const allowedOperation = ['description', 'completed'];
@@ -126,6 +225,28 @@ router.patch('/tasks/:id', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /tasks/{id}:
+ *  delete:
+ *    description: Use to remove task
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *       - name: id
+ *         description: Task Id
+ *         in: query
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '200':
+ *        description: Delete task successful
+ *      '403':
+ *        description: Invalid jwt token
+ */
 router.delete('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
