@@ -233,7 +233,7 @@ router.delete('/users/me', auth, async (req, res) => {
 
 /**
  * @swagger
- * /users/{id}:
+ * /users/me:
  *  patch:
  *    description: Use to update user details
  *    parameters:
@@ -253,7 +253,7 @@ router.delete('/users/me', auth, async (req, res) => {
  *      '403':
  *        description: Invalid jwt token
  */
-router.patch('/users/:id', auth, async (req, res) => {
+router.patch('/users/me', auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdateFields = ['name', 'email', 'password'];
   const isValidOperation = updates.every((update) =>
@@ -266,12 +266,6 @@ router.patch('/users/:id', auth, async (req, res) => {
     });
   }
 
-  const _id = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(_id)) {
-    return res.status(400).send({
-      error: 'Invalid Object ID',
-    });
-  }
   try {
     updates.forEach((update) => {
       req.user[update] = req.body[update];
