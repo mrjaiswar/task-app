@@ -54,3 +54,27 @@ test('should not delete other users task', async () => {
   const task = await Task.findById(taskTwo._id);
   expect(task).not.toBeNull();
 });
+
+test('should not create task with invalid description/completed', async () => {});
+
+test('should not update task with invalid description/completed', async () => {});
+
+test('should delete user task', async () => {});
+
+test('should not delete task if unauthenticated', async () => {});
+
+test('should not update other users task', async () => {});
+
+test('should fetch user task by id', async () => {});
+
+test('should not fetch user task by id if unauthenticated', async () => {});
+
+test('should not fetch other users task by id', async () => {});
+
+test('should fetch only completed tasks', async () => {});
+
+test('should fetch only incomplete tasks', async () => {});
+
+test('should sort tasks by description/completed/createdAt/updatedAt', async () => {});
+
+test('should fetch page of tasks', async () => {});

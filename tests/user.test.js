@@ -24,6 +24,40 @@ test('should signup a new user', async () => {
   expect(user.password).not.toBe('rijuvijayan');
 });
 
+test('should not signup user with invalid name', async () => {
+  const response = await request(app)
+    .post('/users')
+    .send({
+      name:
+        'invalidnameinvalidnameinvalidnameinvalidnameinvalidnameinvalidname',
+      email: 'invalid@gmail.com',
+      password: 'invalidusername',
+    })
+    .expect(500);
+});
+
+test('should not signup user with invalid email', async () => {
+  const response = await request(app)
+    .post('/users')
+    .send({
+      name: 'Riju',
+      email: 'rijutest@gmail.com',
+      password: 'rijupass123!',
+    })
+    .expect(500);
+});
+
+test('should not signup user with invalid password', async () => {
+  const response = await request(app)
+    .post('/users')
+    .send({
+      name: 'Riju',
+      email: 'newemail@gmail.com',
+      password: 'rijupa',
+    })
+    .expect(500);
+});
+
 test('should login existing user', async () => {
   const response = await request(app)
     .post('/users/login')
@@ -87,6 +121,18 @@ test('should not update invalid user fields', async () => {
     .expect(400);
 });
 
+test('should not update user if unauthenticated', async () => {
+  const response = await request(app)
+    .patch('/users/me')
+    .send({
+      name: 'Updated Name',
+    })
+    .expect(403);
+
+  const user = await User.findOne(userOneId);
+  expect(user.name).not.toBe('Updated Name');
+});
+
 test('should delete account for user', async () => {
   await request(app)
     .delete('/users/me')
@@ -97,27 +143,3 @@ test('should delete account for user', async () => {
   const user = await User.findById(userOneId);
   expect(user).toBeNull();
 });
-
-//
-// User Test Ideas
-//
-// Should not signup user with invalid name/email/password
-// Should not update user if unauthenticated
-// Should not update user with invalid name/email/password
-// Should not delete user if unauthenticated
-
-//
-// Task Test Ideas
-//
-// Should not create task with invalid description/completed
-// Should not update task with invalid description/completed
-// Should delete user task
-// Should not delete task if unauthenticated
-// Should not update other users task
-// Should fetch user task by id
-// Should not fetch user task by id if unauthenticated
-// Should not fetch other users task by id
-// Should fetch only completed tasks
-// Should fetch only incomplete tasks
-// Should sort tasks by description/completed/createdAt/updatedAt
-// Should fetch page of tasks
