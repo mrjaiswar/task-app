@@ -19,7 +19,5 @@ jobs:
           node-version: '12.x'
       - name: Install
         run: npm install
-      - name: Current repo
-        run: ls -lart
       - name: Test
-        run: npm test
+        run: npm testCI
