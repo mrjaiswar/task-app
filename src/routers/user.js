@@ -41,7 +41,7 @@ router.post('/users', async (req, res) => {
     res.status(201).send(user);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
@@ -196,7 +196,7 @@ router.get('/users', auth, async (req, res) => {
     res.send(users);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
@@ -274,7 +274,7 @@ router.patch('/users/me', auth, async (req, res) => {
     res.send(req.user);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
@@ -298,7 +298,7 @@ router.delete('/users/:id', async (req, res) => {
     res.send(user);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
