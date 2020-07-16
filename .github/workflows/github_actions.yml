@@ -20,6 +20,6 @@ jobs:
       - name: Install
         run: npm install
       - name: Current repo
-        run: pwd
+        run: ls -lart
       - name: Test
         run: npm test
