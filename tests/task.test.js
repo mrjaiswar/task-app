@@ -48,4 +48,9 @@ test('should not delete other users task', async () => {
     .set('Authorization', `Bearer ${userTwo.tokens.token}`)
     .send()
     .expect(404);
+  expect(response.body).toEqual({
+    error: 'Task not found',
+  });
+  const task = await Task.findById(taskTwo._id);
+  expect(task).not.toBeNull();
 });

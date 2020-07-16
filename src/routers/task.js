@@ -255,7 +255,7 @@ router.delete('/tasks/:id', auth, async (req, res) => {
   }
 
   try {
-    const task = await Task.findByIdAndDelete({
+    const task = await Task.findOne({
       _id: req.params.id,
       owner: req.user._id,
     });
@@ -263,6 +263,8 @@ router.delete('/tasks/:id', auth, async (req, res) => {
       return res.status(404).send({
         error: 'Task not found',
       });
+    } else {
+      await task.deleteOne({ _id: task._id });
     }
     res.send(task);
   } catch (error) {
