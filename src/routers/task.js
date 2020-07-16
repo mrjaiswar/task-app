@@ -46,7 +46,7 @@ router.post('/tasks', auth, async (req, res) => {
     res.status(201).send(task);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
@@ -116,7 +116,7 @@ router.get('/tasks', auth, async (req, res) => {
     res.send(req.user.tasks);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
@@ -139,7 +139,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
     res.send(task);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
@@ -218,7 +218,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
     res.send(task);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
@@ -269,7 +269,7 @@ router.delete('/tasks/:id', auth, async (req, res) => {
     res.send(task);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error!',
+      error: 'Server Error',
       errorMessage: error,
     });
   }
