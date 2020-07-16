@@ -20,4 +20,8 @@ jobs:
       - name: Install
         run: npm install
       - name: Test
+        env:
+          MONGODB_URL: ${{secrets.MONGODB_URL}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          PORT: ${{secrets.PORT}}
         run: npm test
