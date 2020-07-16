@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "test-local": "env-cmd -f config/test.env jest --runInBand --detectOpenHandles",
-    "test": "jest --runInBand --detectOpenHandles"
+    "test-local": "env-cmd -f config/test.env jest --runInBand --detectOpenHandles --forceExit",
+    "test": "jest -e --runInBand --detectOpenHandles --forceExit"
   },
   "jest": {
     "testEnvironment": "node"
