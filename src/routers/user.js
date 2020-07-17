@@ -41,7 +41,7 @@ router.post('/users', async (req, res) => {
     res.status(201).send(user);
   } catch (error) {
     res.status(500).send({
-      error: 'Server Error',
+      error: 'Server Error!',
       errorMessage: error,
     });
   }
