@@ -157,7 +157,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
-      error: 'Invalid Object ID',
+      error: 'Task not found',
     });
   }
   try {
@@ -233,7 +233,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
-      error: 'Invalid Object ID',
+      error: 'Task not found',
     });
   }
 
@@ -288,7 +288,7 @@ router.delete('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
-      error: 'Invalid Object ID',
+      error: 'Task not found',
     });
   }
 

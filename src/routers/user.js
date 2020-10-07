@@ -305,7 +305,7 @@ router.delete('/users/:id', async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
-      error: 'Invalid Object ID',
+      error: 'User not found',
     });
   }
 

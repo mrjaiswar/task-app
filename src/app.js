@@ -39,7 +39,19 @@ const swaggerOptions = {
     ],
     servers: [{
       "url": "/api/v3"
-    }]
+    }],
+    components: {
+      schemas: {
+        user: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer"
+            }
+          }
+        }
+      }
+    }
 
   },
   apis: ['src/routers/*.js'],
