@@ -157,7 +157,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
-      error: 'Task not found',
+      error: 'task not found',
     });
   }
   try {
@@ -167,7 +167,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
     });
     if (!task) {
       return res.status(404).send({
-        error: 'Task not found',
+        error: 'task not found',
       });
     }
     res.send(task);
@@ -233,7 +233,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
-      error: 'Task not found',
+      error: 'task not found',
     });
   }
 
@@ -244,7 +244,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
     });
     if (!task) {
       return res.status(404).send({
-        error: 'Task not found!',
+        error: 'task not found',
       });
     }
     updateBody.forEach((update) => {
@@ -288,7 +288,7 @@ router.delete('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).send({
-      error: 'Task not found',
+      error: 'task not found',
     });
   }
 
@@ -299,7 +299,7 @@ router.delete('/tasks/:id', auth, async (req, res) => {
     });
     if (!task) {
       return res.status(404).send({
-        error: 'Task not found',
+        error: 'task not found',
       });
     } else {
       await task.deleteOne({
