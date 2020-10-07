@@ -31,7 +31,7 @@ const swaggerOptions = {
     host: "localhost:3000",
     tags: [{
         name: 'users',
-        description: 'everything about users'
+        description: 'access to user apis'
       },
       {
         name: 'tasks',
