@@ -49,7 +49,7 @@ test('should not delete other users task', async () => {
     .send()
     .expect(404);
   expect(response.body).toEqual({
-    error: 'Task not found',
+    error: 'task not found',
   });
   const task = await Task.findById(taskTwo._id);
   expect(task).not.toBeNull();
