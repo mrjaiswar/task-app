@@ -14,14 +14,37 @@ const app = express();
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
-      title: 'Task Manager API',
-      description: 'Task Manager API Specifications',
+      version: '1.0.0',
+      title: 'Task Manager',
+      description: 'Task Manager API',
+      termsOfService: 'http://api_url/terms/',
       contact: {
-        name: 'Riju Vijayan',
+        name: 'QualIT Test Engineering',
+        email: 'riju.vijayan@qualit.co.nz',
+        url: 'https://qualitnz.sharepoint.com/TestEngineering/Training/Forms/AllItems.aspx'
+      },
+      license: {
+        name: 'Apache 2.0',
+        url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
       },
     },
+    host: "localhost:3000",
+    tags: [{
+        name: 'users',
+        description: 'everything about users'
+      },
+      {
+        name: 'tasks',
+        description: 'access to tasks apis'
+      }
+    ],
+    servers: [{
+      "url": "/api/v3"
+    }]
+
   },
   apis: ['src/routers/*.js'],
+
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

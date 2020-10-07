@@ -3,13 +3,20 @@ const router = new express.Router();
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
-const { response } = require('express');
-const { sendEmail, sendCancellationEmail } = require('../emails/account');
+const {
+  response
+} = require('express');
+const {
+  sendEmail,
+  sendCancellationEmail
+} = require('../emails/account');
 
 /**
  * @swagger
  * /users:
  *  post:
+ *    tags:
+ *      - users
  *    description: Use to create new users
  *    consumes:
  *      - application/json
@@ -51,6 +58,8 @@ router.post('/users', async (req, res) => {
  * @swagger
  * /users/login:
  *  post:
+ *    tags:
+ *      - users
  *    description: Use to login
  *    consumes:
  *      - application/json
@@ -90,6 +99,8 @@ router.post('/users/login', async (req, res) => {
  * @swagger
  * /users/logout:
  *  post:
+ *    tags:
+ *      - users
  *    description: Use to logout of current session of the user
  *    parameters:
  *       - name: Authorization
@@ -124,6 +135,8 @@ router.post('/users/logout', auth, async (req, res) => {
  * @swagger
  * /users/logoutAll:
  *  post:
+ *    tags:
+ *      - users
  *    description: Use to logout all sessions of an user
  *    parameters:
  *       - name: Authorization
@@ -156,6 +169,8 @@ router.post('/users/logoutAll', auth, async (req, res) => {
  * @swagger
  * /users/me:
  *  get:
+ *    tags:
+ *      - users
  *    description: Use to get current logged in user profile information
  *    parameters:
  *       - name: Authorization
@@ -177,6 +192,8 @@ router.get('/users/me', auth, async (req, res) => {
  * @swagger
  * /users:
  *  get:
+ *    tags:
+ *      - users
  *    description: Use to get details of all registered users in the system
  *    parameters:
  *       - name: Authorization
@@ -206,6 +223,8 @@ router.get('/users', auth, async (req, res) => {
  * @swagger
  * /users/me:
  *  delete:
+ *    tags:
+ *      - users
  *    description: Use to remove user profile
  *    parameters:
  *       - name: Authorization
@@ -235,6 +254,8 @@ router.delete('/users/me', auth, async (req, res) => {
  * @swagger
  * /users/me:
  *  patch:
+ *    tags:
+ *      - users
  *    description: Use to update user details
  *    parameters:
  *       - name: Authorization

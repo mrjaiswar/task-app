@@ -8,6 +8,8 @@ const auth = require('../middleware/auth');
  * @swagger
  * /tasks:
  *  post:
+ *    tags:
+ *      - tasks
  *    description: Use to create tasks
  *    consumes:
  *      - application/json
@@ -29,7 +31,7 @@ const auth = require('../middleware/auth');
  *            description:
  *              type: string
  *            completed:
- *              type: string
+ *              type: boolean
  *    responses:
  *      '201':
  *        description: Task creation successful
@@ -56,6 +58,8 @@ router.post('/tasks', auth, async (req, res) => {
  * @swagger
  * /tasks:
  *  get:
+ *    tags:
+ *      - tasks
  *    description: Use to query tasks
  *    consumes:
  *      - application/json
@@ -122,6 +126,33 @@ router.get('/tasks', auth, async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /tasks/{id}:
+ *  get:
+ *    tags:
+ *      - tasks
+ *    description: Use to get a specific task
+ *    parameters:
+ *       - name: Authorization
+ *         description: JWT Token
+ *         in: header
+ *         required: true
+ *         type: string
+ *       - name: id
+ *         description: Task Id
+ *         in: path
+ *         required: true
+ *         type: string
+ *    responses:
+ *      '200':
+ *        description: Fetch task successful
+ *      '403':
+ *        description: Invalid jwt token
+ *      '404':
+ *        description: Task not found
+ */
 router.get('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -130,7 +161,10 @@ router.get('/tasks/:id', auth, async (req, res) => {
     });
   }
   try {
-    const task = await Task.findOne({ _id, owner: req.user._id });
+    const task = await Task.findOne({
+      _id,
+      owner: req.user._id
+    });
     if (!task) {
       return res.status(404).send({
         error: 'Task not found',
@@ -149,6 +183,8 @@ router.get('/tasks/:id', auth, async (req, res) => {
  * @swagger
  * /tasks/{id}:
  *  patch:
+ *    tags:
+ *      - tasks
  *    description: Use to task user details
  *    parameters:
  *       - name: Authorization
@@ -228,6 +264,8 @@ router.patch('/tasks/:id', auth, async (req, res) => {
  * @swagger
  * /tasks/{id}:
  *  delete:
+ *    tags:
+ *      - tasks
  *    description: Use to remove task
  *    parameters:
  *       - name: Authorization
@@ -237,7 +275,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
  *         type: string
  *       - name: id
  *         description: Task Id
- *         in: query
+ *         in: path
  *         required: true
  *         type: string
  *    responses:
@@ -264,7 +302,9 @@ router.delete('/tasks/:id', auth, async (req, res) => {
         error: 'Task not found',
       });
     } else {
-      await task.deleteOne({ _id: task._id });
+      await task.deleteOne({
+        _id: task._id
+      });
     }
     res.send(task);
   } catch (error) {
