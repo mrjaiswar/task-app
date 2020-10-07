@@ -28,7 +28,6 @@ const swaggerOptions = {
         url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
       },
     },
-    host: "localhost:3000",
     tags: [{
         name: 'users',
         description: 'access to user apis'
